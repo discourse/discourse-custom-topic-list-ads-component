@@ -1,0 +1,5 @@
+en:
+  theme_metadata:
+    description: Custom ad component
+    settings:
+      example_setting: A description of a setting.
