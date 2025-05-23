@@ -1,0 +1,45 @@
+@use "lib/viewport";
+
+.discourse-custom-ad-component {
+  td {
+    width: 100%;
+  }
+
+  a {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5em 0.85em 0.55em;
+    gap: 1.35em;
+    color: var(--primary-high);
+    width: 100%;
+    line-height: var(--line-height-medium);
+
+    @include viewport.from(sm) {
+      padding: 0.55em 0.85em 0.65em;
+      gap: 0.5em;
+      align-items: baseline;
+    }
+
+    .discourse-no-touch & {
+      &:hover {
+        color: var(--tertiary);
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .d-icon {
+    color: var(--primary-medium);
+
+    @include viewport.until(sm) {
+      font-size: var(--font-up-1);
+    }
+
+    @include viewport.from(sm) {
+      position: relative;
+      top: 0.15em; // optical alignment
+    }
+  }
+}

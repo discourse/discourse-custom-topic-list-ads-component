@@ -1,5 +1,18 @@
 en:
   theme_metadata:
-    description: Custom ad component
+    description: Display text ads between topics.
     settings:
-      example_setting: A description of a setting.
+      show_between_every:
+        description: "Number of topics between ads"
+      ads:
+        description: "Ad content, links, and visibility"
+        schema:
+          properties:
+            link:
+              description: "Destination URL"
+            text:
+              description: "Content of the ad"
+            include_groups:
+              description: "Use groups to control who will see the ads. Leave blank for all. Format as a comma-separated list of group names. Included 'anon' for logged-out visitors."
+            exclude_groups:
+              description: "Exclude members of these groups. Format as a comma-separated list of group names."
