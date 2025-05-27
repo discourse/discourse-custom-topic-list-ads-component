@@ -1,5 +1,3 @@
-# DIY Ads
+# Custom topic list ads
 
-**Theme Summary**
-
-For more information, please see: **url to meta topic**
+Create custom text ads to display on the Discourse topic list
