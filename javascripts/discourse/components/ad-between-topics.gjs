@@ -68,6 +68,7 @@ export default class AdBetweenTopics extends Component {
             ? this.currentAdData.text.trim()
             : "unknown");
 
+        // eslint-disable-next-line no-console
         console.log(`Ad with text '${adIdentifier}' is visible!`);
 
         // send plausible impression tracking event here
@@ -120,7 +121,7 @@ export default class AdBetweenTopics extends Component {
             <a
               href={{this.currentAdData.finalLink}}
               target="_blank"
-              rel="noopener sponsored nofollow"
+              rel="noopener noreferrer nofollow sponsored"
             >
               {{icon "rectangle-ad"}}
               {{this.currentAdData.text}}
