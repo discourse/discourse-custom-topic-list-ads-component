@@ -7,6 +7,18 @@ import { service } from "@ember/service";
 import icon from "discourse/helpers/d-icon";
 import { bind } from "discourse/lib/decorators";
 
+function _impressionForPlausible(event) {
+  if (window.plausible) {
+    const plausibleEventName = settings.ads_impression_event_name;
+    const propsFromEvent = event.detail;
+
+    window.plausible(plausibleEventName, { props: propsFromEvent });
+  } else {
+    // eslint-disable-next-line no-console
+    console.warn("Plausible not found.");
+  }
+}
+
 export default class AdBetweenTopics extends Component {
   @service adConfigurator;
   @service router;
@@ -61,17 +73,29 @@ export default class AdBetweenTopics extends Component {
   @bind
   handleAdIntersection(entries, observer) {
     entries.forEach((entry) => {
-      if (entry.isIntersecting && this.currentAdData) {
-        const adIdentifier =
+      if (
+        entry.isIntersecting &&
+        this.currentAdData &&
+        this.currentAdData.finalLink
+      ) {
+        const adIdentifierForLogging =
           this.currentAdData.id ||
           (this.currentAdData.text
-            ? this.currentAdData.text.trim()
+            ? this.currentAdData.text.trim().substring(0, 30)
             : "unknown");
 
-        // eslint-disable-next-line no-console
-        console.log(`Ad with text '${adIdentifier}' is visible!`);
+        const adDataForAnalytics = {
+          ad_id: this.currentAdData.id,
+          ad_text_snippet: this.currentAdData.text,
+          ad_link: this.currentAdData.finalLink,
+        };
 
-        // send plausible impression tracking event here
+        if (settings.plausible_integration_enabled) {
+          _impressionForPlausible({ detail: adDataForAnalytics });
+        } else {
+          // eslint-disable-next-line no-console
+          console.log(`Ad with text '${adIdentifierForLogging}' is visible!`);
+        }
 
         observer.unobserve(this.adElement);
       }
@@ -122,6 +146,7 @@ export default class AdBetweenTopics extends Component {
               href={{this.currentAdData.finalLink}}
               target="_blank"
               rel="noopener noreferrer nofollow sponsored"
+              class={{this.currentAdData.customClasses}}
             >
               {{icon "rectangle-ad"}}
               {{this.currentAdData.text}}

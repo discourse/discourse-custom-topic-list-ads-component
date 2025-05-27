@@ -16,3 +16,5 @@ en:
               description: "Use groups to control who will see the ads. Leave blank for all. Format as a comma-separated list of group names. Included 'anon' for logged-out visitors."
             exclude_groups:
               description: "Exclude members of these groups. Format as a comma-separated list of group names."
+            custom_class:
+              description: "Comma-separated custom CSS classes for the ad"

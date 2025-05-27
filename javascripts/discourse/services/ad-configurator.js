@@ -27,6 +27,16 @@ function _doesUserMatchGroupCriteria(
   return false;
 }
 
+function parseCustomClasses(ad) {
+  if (ad.custom_class && ad.custom_class.trim() !== "") {
+    return ad.custom_class
+      .split(",")
+      .map((customClass) => customClass.trim())
+      .filter((customClass) => customClass.length > 0)
+      .join(" ");
+  }
+}
+
 export default class AdConfigurator extends Service {
   @service currentUser;
 
@@ -90,7 +100,11 @@ export default class AdConfigurator extends Service {
         return shouldBeIncluded && !shouldBeExcluded;
       })
       .map((ad) => {
-        return { ...ad, finalLink: this._buildFinalLink(ad) };
+        return {
+          ...ad,
+          finalLink: this._buildFinalLink(ad),
+          customClasses: parseCustomClasses(ad),
+        };
       });
 
     if (this._eligibleAds.length > 0) {
