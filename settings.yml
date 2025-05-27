@@ -27,6 +27,16 @@ ads:
         type: string
       utm_content:
         type: string
+      custom_class:
+        type: string
+
+ads_impression_event_name:
+  type: string
+  default: "ads_impression"
+
+plausible_integration_enabled:
+  type: bool
+  default: false
 
 svg_icons:
   default: "rectangle-ad"
