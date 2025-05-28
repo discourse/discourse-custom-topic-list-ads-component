@@ -54,6 +54,11 @@ export default class AdBetweenTopics extends Component {
     const category = this.router.currentRoute.attributes?.category?.id;
     const parentCategory =
       this.router.currentRoute.attributes?.category?.parent_category_id;
+    const isDiscovery = this.router.currentRouteName.includes("discovery");
+
+    if (!isDiscovery) {
+      return false;
+    }
 
     if (settings.exclude_categories) {
       const excludedCategories = settings.exclude_categories
