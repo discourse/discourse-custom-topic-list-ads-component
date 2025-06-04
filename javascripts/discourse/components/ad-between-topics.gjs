@@ -150,7 +150,6 @@ export default class AdBetweenTopics extends Component {
             >
               <span class="disclosure">
                 {{i18n (themePrefix "disclosure")}}
-
               </span>
               <span class="text-content">{{this.currentAdData.text}} </span>
             </a>
