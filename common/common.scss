@@ -19,27 +19,25 @@
     @include viewport.from(sm) {
       padding: 0.55em 0.85em 0.65em;
       gap: 0.5em;
-      align-items: baseline;
     }
 
     .discourse-no-touch & {
       &:hover {
-        color: var(--tertiary);
-        text-decoration: underline;
+        .text-content {
+          color: var(--tertiary);
+          text-decoration: underline;
+        }
       }
     }
   }
 
-  .d-icon {
-    color: var(--primary-medium);
-
-    @include viewport.until(sm) {
-      font-size: var(--font-up-1);
-    }
-
-    @include viewport.from(sm) {
-      position: relative;
-      top: 0.15em; // optical alignment
-    }
+  .disclosure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-low);
+    padding: 0.15em 0.25em;
+    border-radius: 0.25em;
+    font-size: var(--font-down-2);
   }
 }

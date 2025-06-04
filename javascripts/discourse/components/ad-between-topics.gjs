@@ -4,8 +4,8 @@ import { action } from "@ember/object";
 import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import willDestroy from "@ember/render-modifiers/modifiers/will-destroy";
 import { service } from "@ember/service";
-import icon from "discourse/helpers/d-icon";
 import { bind } from "discourse/lib/decorators";
+import { i18n } from "discourse-i18n";
 
 function _impressionForPlausible(event) {
   if (window.plausible) {
@@ -148,8 +148,11 @@ export default class AdBetweenTopics extends Component {
               rel="noopener noreferrer nofollow sponsored"
               class={{this.currentAdData.customClasses}}
             >
-              {{icon "rectangle-ad"}}
-              {{this.currentAdData.text}}
+              <span class="disclosure">
+                {{i18n (themePrefix "disclosure")}}
+
+              </span>
+              <span class="text-content">{{this.currentAdData.text}} </span>
             </a>
           {{/if}}
         </td>
