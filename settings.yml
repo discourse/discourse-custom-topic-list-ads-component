@@ -41,8 +41,3 @@ ads_impression_event_name:
 plausible_integration_enabled:
   type: bool
   default: false
-
-svg_icons:
-  default: "rectangle-ad"
-  type: "list"
-  list_type: "compact"

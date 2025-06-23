@@ -20,3 +20,4 @@ en:
               description: "Exclude members of these groups. Format as a comma-separated list of group names."
             custom_class:
               description: "Comma-separated custom CSS classes for the ad"
+  disclosure: "Ad"
