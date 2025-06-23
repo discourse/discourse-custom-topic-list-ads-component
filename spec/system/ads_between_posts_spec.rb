@@ -56,7 +56,7 @@ RSpec.describe "Ads Between Posts", system: true do
     it "shows ads at the configured frequency for anon users" do
       visit(topic.url)
 
-      expect(find_ads_in_post_stream.size).to eq(2)
+      expect(find_ads_in_post_stream.size).to eq(4) # including the ad after the initial post
       expect(page).to have_css(".discourse-custom-ad-component a[href*='example.com/ad1']")
     end
 
