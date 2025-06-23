@@ -81,7 +81,7 @@ RSpec.describe "Ads Between Topics", system: true do
 
   before do
     theme.update_setting(:ads, default_ads_config)
-    theme.update_setting(:show_between_every, 2)
+    theme.update_setting(:show_between_topics, 2)
     theme.update_setting(:exclude_categories, "")
     theme.save!
   end
@@ -167,7 +167,7 @@ RSpec.describe "Ads Between Topics", system: true do
 
   context "when ad frequency is changed" do
     before do
-      theme.update_setting(:show_between_every, 1)
+      theme.update_setting(:show_between_topics, 1)
       theme.save!
       create_topics(3, general_category)
     end

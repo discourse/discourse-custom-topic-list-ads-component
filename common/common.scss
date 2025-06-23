@@ -5,7 +5,6 @@
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    justify-content: center;
     padding: 0.5em 0.85em 0.55em;
     gap: 1.35em;
     color: var(--primary-high);
@@ -24,6 +23,34 @@
           text-decoration: underline;
         }
       }
+    }
+  }
+
+  &.--between-topics {
+    a {
+      justify-content: center;
+    }
+  }
+
+  &.--between-posts {
+    a {
+      border-top: 1px solid var(--primary-low);
+      max-width: calc(
+        var(--topic-body-width) + var(--topic-body-width-padding) * 2 +
+          var(--topic-avatar-width)
+      );
+
+      @include viewport.from(sm) {
+        padding-left: calc(
+          var(--topic-avatar-width) + var(--topic-body-width-padding) + 1px
+        );
+      }
+    }
+  }
+
+  &.--last-post {
+    a {
+      padding-left: 0.15em;
     }
   }
 

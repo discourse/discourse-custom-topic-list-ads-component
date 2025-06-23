@@ -1,6 +1,6 @@
-# Custom topic list ads
+# Custom ads
 
-Create custom text ads to display on the Discourse topic list.
+Create custom text ads to display on the Discourse topic list and between posts.
 
 This currently supports [Plausible](https://plausible.io/) for impression tracking. Note that you'll need to make sure the relevant Plausible scripts are present, for example:
 

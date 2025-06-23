@@ -2,8 +2,10 @@ en:
   theme_metadata:
     description: Display text ads between topics.
     settings:
-      show_between_every:
-        description: "Number of topics between ads"
+      show_between_topics:
+        description: "Number of topics between ads in the topic list"
+      show_between_posts:
+        description: "Number of posts between ads within a topic"
       ads:
         description: "Ad content, links, and visibility"
         schema:

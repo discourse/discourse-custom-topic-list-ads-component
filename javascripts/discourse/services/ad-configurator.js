@@ -133,13 +133,13 @@ export default class AdConfigurator extends Service {
     return adToServe;
   }
 
-  _buildFinalLink(adData) {
-    if (!adData) {
-      return;
+  _buildFinalLink(adData, extraParams = {}) {
+    if (!adData || !adData.link) {
+      return null;
     }
 
     try {
-      let url = new URL(adData.link);
+      const url = new URL(adData.link);
 
       Object.keys(adData).forEach((key) => {
         if (key.startsWith("utm_") && adData[key]) {
@@ -147,9 +147,50 @@ export default class AdConfigurator extends Service {
         }
       });
 
+      Object.entries(extraParams).forEach(([key, value]) => {
+        if (value) {
+          url.searchParams.append(key, value);
+        }
+      });
+
       return url.toString();
     } catch {
       return null;
+    }
+  }
+
+  getAdForSlot(shouldGet, trackingParams = {}) {
+    if (shouldGet && this.isReady && this.eligibleAdsCount > 0) {
+      const ad = this.getNextAd();
+
+      return {
+        ...ad,
+        finalLink: this._buildFinalLink(ad, trackingParams),
+      };
+    } else {
+      return null;
+    }
+  }
+
+  shouldExcludeCategory(categoryId, parentCategoryId) {
+    if (!settings.exclude_categories) {
+      return false;
+    }
+
+    const excluded = settings.exclude_categories
+      .split("|")
+      .map((id) => parseInt(id, 10));
+    return excluded.includes(categoryId) || excluded.includes(parentCategoryId);
+  }
+
+  trackImpression(adData) {
+    if (settings.plausible_integration_enabled && window.plausible) {
+      window.plausible(settings.ads_impression_event_name, { props: adData });
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(
+        `Ad with text '${adData.ad_text_snippet?.slice(0, 30)}' is visible!`
+      );
     }
   }
 }
