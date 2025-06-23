@@ -4,9 +4,9 @@ import { action } from "@ember/object";
 import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import willDestroy from "@ember/render-modifiers/modifiers/will-destroy";
 import { service } from "@ember/service";
-import icon from "discourse/helpers/d-icon";
 import { bind } from "discourse/lib/decorators";
 import Category from "discourse/models/category";
+import { i18n } from "discourse-i18n";
 
 export default class AdBetweenPosts extends Component {
   @service adConfigurator;
@@ -126,8 +126,10 @@ export default class AdBetweenPosts extends Component {
               rel="noopener noreferrer nofollow sponsored"
               class={{this.currentAdData.customClasses}}
             >
-              {{icon "rectangle-ad"}}
-              {{this.currentAdData.text}}
+              <span class="disclosure">
+                {{i18n (themePrefix "disclosure")}}
+              </span>
+              <span class="text-content">{{this.currentAdData.text}}</span>
             </a>
           {{/if}}
         </div>
