@@ -23,15 +23,15 @@ export default class AdBetweenPosts extends Component {
 
     if (settings.show_between_posts !== 0) {
       this.currentAdData = this.adConfigurator.getAdForSlot(
-        this.args.model.post_number === 1 ||
-          this.args.model.post_number % settings.show_between_posts === 0,
+        this.args.post?.post_number === 1 ||
+          this.args.post?.post_number % settings.show_between_posts === 0,
         { ad_placement: "between_posts" }
       );
     }
   }
 
   get shouldShow() {
-    const categoryId = this.args.model?.topic?.category_id;
+    const categoryId = this.args.post?.topic?.category_id;
     const category = Category.findById(categoryId);
     const parentCategoryId = category?.parent_category_id;
 
@@ -52,7 +52,7 @@ export default class AdBetweenPosts extends Component {
 
   get afterLastPost() {
     return (
-      this.args.model.topic.highest_post_number === this.args.model.post_number
+      this.args.post?.topic.highest_post_number === this.args.post?.post_number
     );
   }
 
