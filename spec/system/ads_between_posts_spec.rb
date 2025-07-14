@@ -42,6 +42,7 @@ RSpec.describe "Ads Between Posts", system: true do
   end
 
   before do
+    SiteSetting.glimmer_post_stream_mode = "enabled"
     theme.update_setting(:ads, default_ads_config)
     theme.update_setting(:show_between_posts, 2) # show ad every 2 posts
     theme.update_setting(:exclude_categories, "")
