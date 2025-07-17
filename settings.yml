@@ -1,6 +1,10 @@
-show_between_every:
+show_between_topics:
   type: integer
   default: 20
+
+show_between_posts:
+  type: integer
+  default: 10
 
 exclude_categories:
   type: list

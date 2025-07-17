@@ -5,16 +5,14 @@ import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import willDestroy from "@ember/render-modifiers/modifiers/will-destroy";
 import { service } from "@ember/service";
 import { bind } from "discourse/lib/decorators";
+import Category from "discourse/models/category";
 import { i18n } from "discourse-i18n";
 
-export default class AdBetweenTopics extends Component {
+export default class AdBetweenPosts extends Component {
   @service adConfigurator;
   @service router;
 
-  @tracked currentAdData = this.adConfigurator.getAdForSlot(
-    (this.args.outletArgs.index + 1) % settings.show_between_topics === 0,
-    { ad_placement: "between_topics" }
-  );
+  @tracked currentAdData;
 
   intersectionObserver = null;
   adElement = null;
@@ -22,25 +20,40 @@ export default class AdBetweenTopics extends Component {
   constructor() {
     super(...arguments);
     this.adConfigurator.initializeIfNeeded();
+
+    if (settings.show_between_posts !== 0) {
+      this.currentAdData = this.adConfigurator.getAdForSlot(
+        this.args.post?.post_number === 1 ||
+          this.args.post?.post_number % settings.show_between_posts === 0,
+        { ad_placement: "between_posts" }
+      );
+    }
   }
 
   get shouldShow() {
-    const categoryId = this.router.currentRoute.attributes?.category?.id;
-    const parentCategoryId =
-      this.router.currentRoute.attributes?.category?.parent_category_id;
-    const isDiscovery = this.router.currentRouteName.includes("discovery");
+    const categoryId = this.args.post?.topic?.category_id;
+    const category = Category.findById(categoryId);
+    const parentCategoryId = category?.parent_category_id;
 
-    if (!isDiscovery) {
-      return false;
-    }
-
-    if (
-      this.adConfigurator.shouldExcludeCategory(categoryId, parentCategoryId)
-    ) {
-      return false;
+    if (settings.exclude_categories) {
+      const excludedCategories = settings.exclude_categories
+        .split("|")
+        .map((cat) => parseInt(cat, 10));
+      if (
+        excludedCategories.includes(categoryId) ||
+        excludedCategories.includes(parentCategoryId)
+      ) {
+        return false;
+      }
     }
 
     return !!this.currentAdData;
+  }
+
+  get afterLastPost() {
+    return (
+      this.args.post?.topic.highest_post_number === this.args.post?.post_number
+    );
   }
 
   @bind
@@ -97,12 +110,15 @@ export default class AdBetweenTopics extends Component {
 
   <template>
     {{#if this.shouldShow}}
-      <tr
-        class="discourse-custom-ad-component --between-topics"
+      <div
+        class="discourse-custom-ad-component --between-posts
+          {{if this.afterLastPost '--last-post'}}"
+        {{didInsert this.setupAdImpressionTracking}}
+        {{willDestroy this.cleanUp}}
         {{didInsert this.setupAdImpressionTracking}}
         {{willDestroy this.cleanUp}}
       >
-        <td colspan="100%">
+        <div>
           {{#if this.currentAdData.link}}
             <a
               href={{this.currentAdData.finalLink}}
@@ -116,8 +132,8 @@ export default class AdBetweenTopics extends Component {
               <span class="text-content">{{this.currentAdData.text}}</span>
             </a>
           {{/if}}
-        </td>
-      </tr>
+        </div>
+      </div>
     {{/if}}
   </template>
 }
