@@ -4,7 +4,7 @@ RSpec.describe "Ads Between Topics", system: true do
   fab!(:theme) { upload_theme_component }
 
   fab!(:user)
-  fab!(:staff_user) { Fabricate(:admin) }
+  fab!(:staff_user, :admin)
   fab!(:group_member) do
     user = Fabricate(:user, username: "adfan")
     group = Fabricate(:group, name: "advertarget")

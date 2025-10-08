@@ -10,7 +10,6 @@ import { i18n } from "discourse-i18n";
 
 export default class AdBetweenPosts extends Component {
   @service adConfigurator;
-  @service router;
 
   @tracked currentAdData;
 

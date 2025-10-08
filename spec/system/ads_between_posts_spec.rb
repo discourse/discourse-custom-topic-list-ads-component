@@ -4,10 +4,10 @@ RSpec.describe "Ads Between Posts", system: true do
   fab!(:theme) { upload_theme_component }
 
   fab!(:user)
-  fab!(:staff_user) { Fabricate(:admin) }
+  fab!(:staff_user, :admin)
 
   fab!(:general_category) { Fabricate(:category, name: "General") }
-  fab!(:excluded_category) { Fabricate(:category, name: "No Ads" ) }
+  fab!(:excluded_category) { Fabricate(:category, name: "No Ads") }
 
   let(:default_ads_config) do
     [
@@ -32,9 +32,7 @@ RSpec.describe "Ads Between Posts", system: true do
 
   def create_post_stream(topic, count)
     Fabricate(:post, topic: topic, user: topic.user, raw: "Initial post") if topic.posts.empty?
-    count.times do |i|
-      Fabricate(:post, topic: topic, raw: "This is content for a reply ##{i + 1}")
-    end
+    count.times { |i| Fabricate(:post, topic: topic, raw: "This is content for a reply ##{i + 1}") }
   end
 
   def find_ads_in_post_stream
