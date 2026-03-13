@@ -18,7 +18,6 @@ export default class AdBetweenPosts extends Component {
 
   constructor() {
     super(...arguments);
-    this.adConfigurator.initializeIfNeeded();
 
     if (settings.show_between_posts !== 0) {
       this.currentAdData = this.adConfigurator.getAdForSlot(

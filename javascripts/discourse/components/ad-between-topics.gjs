@@ -18,11 +18,6 @@ export default class AdBetweenTopics extends Component {
   intersectionObserver = null;
   adElement = null;
 
-  constructor() {
-    super(...arguments);
-    this.adConfigurator.initializeIfNeeded();
-  }
-
   get shouldShow() {
     const isDiscovery = this.router.currentRouteName.includes("discovery");
     if (!isDiscovery) {
