@@ -24,14 +24,14 @@ export default class AdBetweenTopics extends Component {
   }
 
   get shouldShow() {
-    const categoryId = this.router.currentRoute.attributes?.category?.id;
-    const parentCategoryId =
-      this.router.currentRoute.attributes?.category?.parent_category_id;
     const isDiscovery = this.router.currentRouteName.includes("discovery");
-
     if (!isDiscovery) {
       return false;
     }
+
+    const categoryId = this.router.currentRoute.attributes?.category?.id;
+    const parentCategoryId =
+      this.router.currentRoute.attributes?.category?.parent_category_id;
 
     if (
       this.adConfigurator.shouldExcludeCategory(categoryId, parentCategoryId)
