@@ -59,17 +59,16 @@ export default class AdConfigurator extends Service {
       return;
     }
 
-    const allAdsConfig = settings.ads ? settings.ads : [];
+    const allAdsConfig = settings.ads || [];
 
     if (!allAdsConfig.length) {
       this._isInitialized = true;
       return;
     }
 
-    const currentUserGroups = this.currentUser
-      ? this.currentUser.groups.map((g) => g.name.toLowerCase())
-      : [];
-    const isUserStaff = this.currentUser ? this.currentUser.staff : false;
+    const currentUserGroups =
+      this.currentUser?.groups.map((g) => g.name.toLowerCase()) ?? [];
+    const isUserStaff = this.currentUser?.staff ?? false;
     const isUserAnon = !this.currentUser;
 
     this._eligibleAds = allAdsConfig
