@@ -18,7 +18,6 @@ export default class AdBetweenPosts extends Component {
 
   constructor() {
     super(...arguments);
-    this.adConfigurator.initializeIfNeeded();
 
     if (settings.show_between_posts !== 0) {
       this.currentAdData = this.adConfigurator.getAdForSlot(
@@ -58,11 +57,7 @@ export default class AdBetweenPosts extends Component {
   @bind
   handleAdIntersection(entries, observer) {
     entries.forEach((entry) => {
-      if (
-        entry.isIntersecting &&
-        this.currentAdData &&
-        this.currentAdData.finalLink
-      ) {
+      if (entry.isIntersecting && this.currentAdData?.finalLink) {
         const adDataForAnalytics = {
           ad_id: this.currentAdData.id,
           ad_text_snippet: this.currentAdData.text,
@@ -79,10 +74,7 @@ export default class AdBetweenPosts extends Component {
   @action
   setupAdImpressionTracking(element) {
     this.adElement = element;
-
-    if (this.intersectionObserver) {
-      this.intersectionObserver.disconnect();
-    }
+    this.intersectionObserver?.disconnect();
 
     if (this.currentAdData && this.adElement) {
       const observerOptions = {
@@ -101,21 +93,17 @@ export default class AdBetweenPosts extends Component {
 
   @action
   cleanUp() {
-    if (this.intersectionObserver) {
-      this.intersectionObserver.disconnect();
-    }
+    this.intersectionObserver?.disconnect();
     this.adElement = null;
   }
 
   <template>
     {{#if this.shouldShow}}
       <div
+        {{didInsert this.setupAdImpressionTracking}}
+        {{willDestroy this.cleanUp}}
         class="discourse-custom-ad-component --between-posts
           {{if this.afterLastPost '--last-post'}}"
-        {{didInsert this.setupAdImpressionTracking}}
-        {{willDestroy this.cleanUp}}
-        {{didInsert this.setupAdImpressionTracking}}
-        {{willDestroy this.cleanUp}}
       >
         <div>
           {{#if this.currentAdData.link}}

@@ -1,5 +1,4 @@
 import Component from "@glimmer/component";
-import { tracked } from "@glimmer/tracking";
 import { action } from "@ember/object";
 import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import willDestroy from "@ember/render-modifiers/modifiers/will-destroy";
@@ -11,28 +10,23 @@ export default class AdBetweenTopics extends Component {
   @service adConfigurator;
   @service router;
 
-  @tracked currentAdData = this.adConfigurator.getAdForSlot(
-    (this.args.outletArgs.index + 1) % settings.show_between_topics === 0,
+  currentAdData = this.adConfigurator.getAdForSlot(
+    (this.args.index + 1) % settings.show_between_topics === 0,
     { ad_placement: "between_topics" }
   );
 
   intersectionObserver = null;
   adElement = null;
 
-  constructor() {
-    super(...arguments);
-    this.adConfigurator.initializeIfNeeded();
-  }
-
   get shouldShow() {
-    const categoryId = this.router.currentRoute.attributes?.category?.id;
-    const parentCategoryId =
-      this.router.currentRoute.attributes?.category?.parent_category_id;
     const isDiscovery = this.router.currentRouteName.includes("discovery");
-
     if (!isDiscovery) {
       return false;
     }
+
+    const categoryId = this.router.currentRoute.attributes?.category?.id;
+    const parentCategoryId =
+      this.router.currentRoute.attributes?.category?.parent_category_id;
 
     if (
       this.adConfigurator.shouldExcludeCategory(categoryId, parentCategoryId)
@@ -46,11 +40,7 @@ export default class AdBetweenTopics extends Component {
   @bind
   handleAdIntersection(entries, observer) {
     entries.forEach((entry) => {
-      if (
-        entry.isIntersecting &&
-        this.currentAdData &&
-        this.currentAdData.finalLink
-      ) {
+      if (entry.isIntersecting && this.currentAdData?.finalLink) {
         const adDataForAnalytics = {
           ad_id: this.currentAdData.id,
           ad_text_snippet: this.currentAdData.text,
@@ -67,10 +57,7 @@ export default class AdBetweenTopics extends Component {
   @action
   setupAdImpressionTracking(element) {
     this.adElement = element;
-
-    if (this.intersectionObserver) {
-      this.intersectionObserver.disconnect();
-    }
+    this.intersectionObserver?.disconnect();
 
     if (this.currentAdData && this.adElement) {
       const observerOptions = {
@@ -89,9 +76,7 @@ export default class AdBetweenTopics extends Component {
 
   @action
   cleanUp() {
-    if (this.intersectionObserver) {
-      this.intersectionObserver.disconnect();
-    }
+    this.intersectionObserver?.disconnect();
     this.adElement = null;
   }
 
