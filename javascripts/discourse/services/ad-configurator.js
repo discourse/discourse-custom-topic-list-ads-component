@@ -117,9 +117,7 @@ export default class AdConfigurator extends Service {
   }
 
   getNextAd() {
-    if (!this._isInitialized) {
-      this.initializeIfNeeded();
-    }
+    this.initializeIfNeeded();
 
     if (this._eligibleAds.length === 0) {
       return;
