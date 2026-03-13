@@ -62,10 +62,7 @@ export default class AdBetweenTopics extends Component {
   @action
   setupAdImpressionTracking(element) {
     this.adElement = element;
-
-    if (this.intersectionObserver) {
-      this.intersectionObserver.disconnect();
-    }
+    this.intersectionObserver?.disconnect();
 
     if (this.currentAdData && this.adElement) {
       const observerOptions = {
@@ -84,9 +81,7 @@ export default class AdBetweenTopics extends Component {
 
   @action
   cleanUp() {
-    if (this.intersectionObserver) {
-      this.intersectionObserver.disconnect();
-    }
+    this.intersectionObserver?.disconnect();
     this.adElement = null;
   }
 

@@ -58,11 +58,7 @@ export default class AdBetweenPosts extends Component {
   @bind
   handleAdIntersection(entries, observer) {
     entries.forEach((entry) => {
-      if (
-        entry.isIntersecting &&
-        this.currentAdData &&
-        this.currentAdData.finalLink
-      ) {
+      if (entry.isIntersecting && this.currentAdData?.finalLink) {
         const adDataForAnalytics = {
           ad_id: this.currentAdData.id,
           ad_text_snippet: this.currentAdData.text,
