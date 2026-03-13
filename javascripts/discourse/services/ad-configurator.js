@@ -46,14 +46,6 @@ export default class AdConfigurator extends Service {
   _currentIndex = 0;
   _isInitialized = false;
 
-  get isReady() {
-    return this._isInitialized;
-  }
-
-  get eligibleAdsCount() {
-    return this._eligibleAds.length;
-  }
-
   initializeIfNeeded() {
     if (this._isInitialized) {
       return;
@@ -117,8 +109,6 @@ export default class AdConfigurator extends Service {
   }
 
   getNextAd() {
-    this.initializeIfNeeded();
-
     if (this._eligibleAds.length === 0) {
       return;
     }
@@ -157,7 +147,9 @@ export default class AdConfigurator extends Service {
   }
 
   getAdForSlot(shouldGet, trackingParams = {}) {
-    if (shouldGet && this.isReady && this.eligibleAdsCount > 0) {
+    this.initializeIfNeeded();
+
+    if (shouldGet && this._eligibleAds.length > 0) {
       const ad = this.getNextAd();
 
       return {
