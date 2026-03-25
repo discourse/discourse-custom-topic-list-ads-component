@@ -46,30 +46,21 @@ export default class AdConfigurator extends Service {
   _currentIndex = 0;
   _isInitialized = false;
 
-  get isReady() {
-    return this._isInitialized;
-  }
-
-  get eligibleAdsCount() {
-    return this._eligibleAds.length;
-  }
-
   initializeIfNeeded() {
     if (this._isInitialized) {
       return;
     }
 
-    const allAdsConfig = settings.ads ? settings.ads : [];
+    const allAdsConfig = settings.ads || [];
 
     if (!allAdsConfig.length) {
       this._isInitialized = true;
       return;
     }
 
-    const currentUserGroups = this.currentUser
-      ? this.currentUser.groups.map((g) => g.name.toLowerCase())
-      : [];
-    const isUserStaff = this.currentUser ? this.currentUser.staff : false;
+    const currentUserGroups =
+      this.currentUser?.groups.map((g) => g.name.toLowerCase()) ?? [];
+    const isUserStaff = this.currentUser?.staff ?? false;
     const isUserAnon = !this.currentUser;
 
     this._eligibleAds = allAdsConfig
@@ -118,10 +109,6 @@ export default class AdConfigurator extends Service {
   }
 
   getNextAd() {
-    if (!this._isInitialized) {
-      this.initializeIfNeeded();
-    }
-
     if (this._eligibleAds.length === 0) {
       return;
     }
@@ -160,7 +147,9 @@ export default class AdConfigurator extends Service {
   }
 
   getAdForSlot(shouldGet, trackingParams = {}) {
-    if (shouldGet && this.isReady && this.eligibleAdsCount > 0) {
+    this.initializeIfNeeded();
+
+    if (shouldGet && this._eligibleAds.length > 0) {
       const ad = this.getNextAd();
 
       return {
