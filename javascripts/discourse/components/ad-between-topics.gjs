@@ -18,6 +18,14 @@ export default class AdBetweenTopics extends Component {
   intersectionObserver = null;
   adElement = null;
 
+  get linkClasses() {
+    const page = this.router.currentURL?.split("?")[0].replace(/^\//, "");
+    const plausibleClass = `plausible-event-page=${page}`;
+    return [plausibleClass, this.currentAdData?.customClasses]
+      .filter(Boolean)
+      .join(" ");
+  }
+
   get shouldShow() {
     const isDiscovery = this.router.currentRouteName.includes("discovery");
     if (!isDiscovery) {
@@ -93,7 +101,7 @@ export default class AdBetweenTopics extends Component {
               href={{this.currentAdData.finalLink}}
               target="_blank"
               rel="noopener noreferrer nofollow sponsored"
-              class={{this.currentAdData.customClasses}}
+              class={{this.linkClasses}}
             >
               <span class="disclosure">
                 {{i18n (themePrefix "disclosure")}}
