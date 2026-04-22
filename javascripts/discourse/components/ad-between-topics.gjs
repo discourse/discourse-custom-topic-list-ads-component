@@ -19,9 +19,7 @@ export default class AdBetweenTopics extends Component {
   adElement = null;
 
   get linkClasses() {
-    const page = this.router.currentRouteName
-      .replace(/^discovery\./, "")
-      .split(".")[0];
+    const page = this.router.currentURL?.split("?")[0].replace(/^\//, "");
     const plausibleClass = `plausible-event-page=${page}`;
     return [plausibleClass, this.currentAdData?.customClasses]
       .filter(Boolean)
