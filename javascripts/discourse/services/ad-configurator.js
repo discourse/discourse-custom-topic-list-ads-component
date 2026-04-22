@@ -39,6 +39,7 @@ function parseCustomClasses(ad) {
 
 export default class AdConfigurator extends Service {
   @service currentUser;
+  @service router;
 
   @tracked _eligibleAds = [];
 
@@ -173,8 +174,10 @@ export default class AdConfigurator extends Service {
   }
 
   trackImpression(adData) {
+    const props = { ...adData, page: this.router.currentRouteName };
+
     if (settings.plausible_integration_enabled && window.plausible) {
-      window.plausible(settings.ads_impression_event_name, { props: adData });
+      window.plausible(settings.ads_impression_event_name, { props });
     } else {
       // eslint-disable-next-line no-console
       console.log(
