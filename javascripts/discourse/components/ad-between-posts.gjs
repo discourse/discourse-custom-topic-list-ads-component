@@ -10,6 +10,7 @@ import { i18n } from "discourse-i18n";
 
 export default class AdBetweenPosts extends Component {
   @service adConfigurator;
+  @service router;
 
   @tracked currentAdData;
 
@@ -26,6 +27,13 @@ export default class AdBetweenPosts extends Component {
         { ad_placement: "between_posts" }
       );
     }
+  }
+
+  get linkClasses() {
+    const plausibleClass = `plausible-event-page=${this.router.currentRouteName}`;
+    return [plausibleClass, this.currentAdData?.customClasses]
+      .filter(Boolean)
+      .join(" ");
   }
 
   get shouldShow() {
@@ -111,7 +119,7 @@ export default class AdBetweenPosts extends Component {
               href={{this.currentAdData.finalLink}}
               target="_blank"
               rel="noopener noreferrer nofollow sponsored"
-              class={{this.currentAdData.customClasses}}
+              class={{this.linkClasses}}
             >
               <span class="disclosure">
                 {{i18n (themePrefix "disclosure")}}
