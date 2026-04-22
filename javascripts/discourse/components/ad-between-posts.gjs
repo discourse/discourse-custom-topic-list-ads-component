@@ -30,7 +30,10 @@ export default class AdBetweenPosts extends Component {
   }
 
   get linkClasses() {
-    const plausibleClass = `plausible-event-page=${this.router.currentRouteName}`;
+    const page = this.router.currentRouteName
+      .replace(/^discovery\./, "")
+      .split(".")[0];
+    const plausibleClass = `plausible-event-page=${page}`;
     return [plausibleClass, this.currentAdData?.customClasses]
       .filter(Boolean)
       .join(" ");
