@@ -1,5 +1,4 @@
 import Component from "@glimmer/component";
-import { tracked } from "@glimmer/tracking";
 import { action } from "@ember/object";
 import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import willDestroy from "@ember/render-modifiers/modifiers/will-destroy";
@@ -8,33 +7,20 @@ import { bind } from "discourse/lib/decorators";
 import Category from "discourse/models/category";
 import { i18n } from "discourse-i18n";
 
-export default class AdBetweenPosts extends Component {
-  // The nested replies view renders the `post-article` outlet for every post
-  // at every depth; ads between its top-level replies are handled by
-  // `AdBetweenNestedRoots` instead.
-  static shouldRender(args) {
-    return !args.nestedReplyView;
-  }
-
+export default class AdBetweenNestedRoots extends Component {
   @service adConfigurator;
   @service router;
 
-  @tracked currentAdData;
+  currentAdData =
+    settings.show_between_posts !== 0
+      ? this.adConfigurator.getAdForSlot(
+          (this.args.index + 1) % settings.show_between_posts === 0,
+          { ad_placement: "between_posts" }
+        )
+      : null;
 
   intersectionObserver = null;
   adElement = null;
-
-  constructor() {
-    super(...arguments);
-
-    if (settings.show_between_posts !== 0) {
-      this.currentAdData = this.adConfigurator.getAdForSlot(
-        this.args.post?.post_number === 1 ||
-          this.args.post?.post_number % settings.show_between_posts === 0,
-        { ad_placement: "between_posts" }
-      );
-    }
-  }
 
   get linkClasses() {
     const page = this.router.currentURL?.split("?")[0].replace(/^\//, "");
@@ -45,29 +31,19 @@ export default class AdBetweenPosts extends Component {
   }
 
   get shouldShow() {
-    const categoryId = this.args.post?.topic?.category_id;
+    const categoryId = this.args.topic?.category_id;
     const category = Category.findById(categoryId);
-    const parentCategoryId = category?.parent_category_id;
 
-    if (settings.exclude_categories) {
-      const excludedCategories = settings.exclude_categories
-        .split("|")
-        .map((cat) => parseInt(cat, 10));
-      if (
-        excludedCategories.includes(categoryId) ||
-        excludedCategories.includes(parentCategoryId)
-      ) {
-        return false;
-      }
+    if (
+      this.adConfigurator.shouldExcludeCategory(
+        categoryId,
+        category?.parent_category_id
+      )
+    ) {
+      return false;
     }
 
     return !!this.currentAdData;
-  }
-
-  get afterLastPost() {
-    return (
-      this.args.post?.topic.highest_post_number === this.args.post?.post_number
-    );
   }
 
   @bind
@@ -118,8 +94,7 @@ export default class AdBetweenPosts extends Component {
       <div
         {{didInsert this.setupAdImpressionTracking}}
         {{willDestroy this.cleanUp}}
-        class="discourse-custom-ad-component --between-posts
-          {{if this.afterLastPost '--last-post'}}"
+        class="discourse-custom-ad-component --between-nested-roots"
       >
         <div>
           {{#if this.currentAdData.link}}
