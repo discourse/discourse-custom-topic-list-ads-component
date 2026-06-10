@@ -32,6 +32,14 @@
     }
   }
 
+  &.--between-nested-roots {
+    a {
+      justify-content: center;
+      border: 1px solid var(--primary-low);
+      border-radius: var(--d-border-radius);
+    }
+  }
+
   &.--between-posts {
     a {
       border-top: 1px solid var(--primary-low);
