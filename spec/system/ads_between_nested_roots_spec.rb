@@ -23,7 +23,11 @@ RSpec.describe "Ads between nested roots", system: true do
     SiteSetting.nested_replies_enabled = true
     SiteSetting.nested_replies_default_sort = "old"
     theme.update_setting(:ads, ads_config)
-    theme.update_setting(:show_between_posts, 3)
+    # The nested view cadence must come from show_between_nested_roots, not
+    # show_between_posts — set the latter high enough that reusing it by
+    # mistake would render no ads at all.
+    theme.update_setting(:show_between_posts, 50)
+    theme.update_setting(:show_between_nested_roots, 3)
     theme.update_setting(:exclude_categories, "")
     theme.save!
   end

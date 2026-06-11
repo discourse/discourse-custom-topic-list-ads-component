@@ -6,6 +6,8 @@ en:
         description: "Number of topics between ads in the topic list"
       show_between_posts:
         description: "Number of posts between ads within a topic"
+      show_between_nested_roots:
+        description: "Number of top-level replies between ads in the nested replies view. Set to 0 to disable."
       ads:
         description: "Ad content, links, and visibility"
         schema:

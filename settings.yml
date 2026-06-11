@@ -6,6 +6,10 @@ show_between_posts:
   type: integer
   default: 10
 
+show_between_nested_roots:
+  type: integer
+  default: 5
+
 exclude_categories:
   type: list
   list_type: category
