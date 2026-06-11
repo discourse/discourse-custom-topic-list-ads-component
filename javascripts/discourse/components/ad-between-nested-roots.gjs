@@ -12,9 +12,9 @@ export default class AdBetweenNestedRoots extends Component {
   @service router;
 
   currentAdData =
-    settings.show_between_posts !== 0
+    settings.show_between_nested_roots !== 0
       ? this.adConfigurator.getAdForSlot(
-          (this.args.index + 1) % settings.show_between_posts === 0,
+          (this.args.index + 1) % settings.show_between_nested_roots === 0,
           { ad_placement: "between_posts" }
         )
       : null;
