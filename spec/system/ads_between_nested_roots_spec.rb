@@ -5,6 +5,7 @@ RSpec.describe "Ads between nested roots", system: true do
   fab!(:topic)
   fab!(:op) { Fabricate(:post, topic: topic) }
   fab!(:root_replies) { Fabricate.times(7, :post, topic: topic) }
+  fab!(:nested_topic) { Fabricate(:nested_topic, topic: topic) }
 
   let(:ads_config) do
     [
@@ -33,7 +34,9 @@ RSpec.describe "Ads between nested roots", system: true do
   end
 
   it "shows ads between every nth top-level reply and none inside the reply tree" do
-    visit("/n/#{topic.slug}/#{topic.id}")
+    # The nested view renders through the canonical topic route; /n/... is now
+    # reserved for JSON/API endpoints and redirects browsers back to /t/...
+    visit("/t/#{topic.slug}/#{topic.id}")
 
     expect(page).to have_css(".nested-view")
     expect(page).to have_css(
